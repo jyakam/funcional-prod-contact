@@ -1,7 +1,7 @@
 import { addKeyword, EVENTS } from '@builderbot/bot'
 import { generarResumenConversacionGlobalIA } from '../funciones/helpers/generarResumenConversacion.mjs';
 import { ActualizarResumenUltimaConversacion } from '../funciones/helpers/contactosSheetHelper.mjs';
-import { getContactoByTelefono } from '../../funciones/helpers/cacheContactos.mjs';
+import { getContactoByTelefono } from '../funciones/helpers/cacheContactos.mjs';
 
 // TT Objeto para almacenar temporizadores para cada usuario
 const timers = {}
