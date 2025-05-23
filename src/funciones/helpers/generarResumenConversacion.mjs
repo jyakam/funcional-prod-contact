@@ -25,3 +25,27 @@ MENSAJE:
     return '';
   }
 }
+
+export async function generarResumenConversacionGlobalIA(historial, telefono) {
+  try {
+    const prompt = `
+Eres un asistente experto que analiza todo el historial de una conversación de WhatsApp entre un cliente y un agente AI de ventas.
+Tu tarea es resumir en UNA o DOS frases el motivo de la consulta, lo que pidió el cliente, si compró o no, y cualquier dato clave relevante.
+No inventes datos y especifica solo lo que realmente ocurrió.
+Historial de la conversación:
+${historial}
+    `.trim();
+
+    const response = await EnviarTextoOpenAI(prompt, 'resumenGlobal', 'INFO', { telefono });
+    if (!response || !response.respuesta) {
+      throw new Error('No se obtuvo respuesta válida de EnviarTextoOpenAI');
+    }
+    return response.respuesta.trim();
+  } catch (err) {
+    console.error('❌ Error generando resumen global IA:', {
+      message: err.message,
+      stack: err.stack
+    });
+    return '';
+  }
+}
