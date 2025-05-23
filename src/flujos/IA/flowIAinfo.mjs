@@ -148,17 +148,7 @@ export const flowIAinfo = addKeyword(EVENTS.WELCOME)
 
       console.log('📥 [IAINFO] Respuesta completa recibida de IA:', res?.respuesta)
 
-      try {
-        const resumen = await generarResumenConversacionIA(txt, phone)
-        if (resumen) {
-          await ActualizarResumenUltimaConversacion(contacto, phone, resumen)
-          console.log('📝 [IAINFO] Resumen de conversación guardado.')
-        }
-      } catch (error) {
-        console.error('❌ [IAINFO] Error al generar resumen:', error.message);
-      }
-
-      await manejarRespuestaIA(res, ctx, flowDynamic, gotoFlow, state, txt)
+            await manejarRespuestaIA(res, ctx, flowDynamic, gotoFlow, state, txt)
 
       await state.update({ productoDetectadoEnImagen: false, productoReconocidoPorIA: '' })
     })
@@ -241,16 +231,7 @@ export const flowIAinfo = addKeyword(EVENTS.WELCOME)
           await verificarYActualizarContactoSiEsNecesario(txt, phone, contacto, datos)
         }
       }
-      try {
-        const resumen = await generarResumenConversacionIA(txt, phone)
-        if (resumen) {
-          await ActualizarResumenUltimaConversacion(contacto, phone, resumen)
-        }
-      } catch (error) {
-        console.error('❌ [IAINFO] Error al generar resumen:', error.message);
-      }
-
-      await manejarRespuestaIA(res, ctx, flowDynamic, gotoFlow, state, txt)
+           await manejarRespuestaIA(res, ctx, flowDynamic, gotoFlow, state, txt)
 
       await state.update({ productoDetectadoEnImagen: false, productoReconocidoPorIA: '' })
     })
