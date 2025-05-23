@@ -25,6 +25,7 @@ import { obtenerIntencionConsulta } from '../../funciones/helpers/obtenerIntenci
 import { traducirTexto } from '../../funciones/helpers/traducirTexto.mjs'
 import { enviarImagenProductoOpenAI } from '../../APIs/OpenAi/enviarImagenProductoOpenAI.mjs'
 import { verificarYActualizarContactoSiEsNecesario, detectarIntencionContactoIA } from '../../funciones/helpers/contactosIAHelper.mjs'
+import { actualizarHistorialConversacion } from '../../funciones/helpers/historialConversacion.mjs';
 
 // IMPORTANTE: Cache de contactos (nuevo sistema)
 import { getContactoByTelefono, getCacheContactos, actualizarContactoEnCache } from '../../funciones/helpers/cacheContactos.mjs'
@@ -123,6 +124,8 @@ export const flowIAinfo = addKeyword(EVENTS.WELCOME)
     }
 
     AgruparMensaje(detectar, async (txt) => {
+            // Guardar mensaje del cliente en el historial
+      actualizarHistorialConversacion(txt, 'cliente', state);
       Escribiendo(ctx)
       console.log('🧾 [IAINFO] Texto agrupado final del usuario:', txt)
 
@@ -206,6 +209,8 @@ export const flowIAinfo = addKeyword(EVENTS.WELCOME)
     }
 
     AgruparMensaje(detectar, async (txt) => {
+            // Guardar mensaje del cliente en el historial
+      actualizarHistorialConversacion(txt, 'cliente', state);
       if (ComprobrarListaNegra(ctx) || !BOT.ESTADO) return gotoFlow(idleFlow)
       reset(ctx, gotoFlow, BOT.IDLE_TIME * 60)
       Escribiendo(ctx)
@@ -291,6 +296,10 @@ async function Responder(res, ctx, flowDynamic, state) {
     const startTime = Date.now();
     console.log('⏱️ [DEBUG] Inicio de envío de mensaje a', ctx.from.split('@')[0]);
     await flowDynamic(msj);
+
+    // Guardar mensaje del bot en el historial
+    actualizarHistorialConversacion(res.respuesta, 'bot', state);
+
     console.log('⏱️ [DEBUG] Fin de envío de mensaje a', ctx.from.split('@')[0], 'Tiempo:', Date.now() - startTime, 'ms');
     // Solo UNA llamada a flowDynamic, problema resuelto.
     return;
